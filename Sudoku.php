@@ -109,11 +109,15 @@ class Sudoku
 		for ($x = 0; $x < self::SIZE; $x++) {
 			$values = array();
 			for ($y = 0; $y < self::SIZE; $y++) {
-				$this->values[$x][$y] !== NULL && ($values[] = $this->values[$x][$y]);
-			}
+				$value = $this->values[$x][$y];
 
-			if (!self::isUniqueArray($values)) {
-				return FALSE;
+				if ($value !== NULL) {
+					if (isset($values[$value])) {
+						return FALSE;
+					}
+
+					$values[$value] = TRUE;
+				}
 			}
 		}
 
@@ -127,11 +131,15 @@ class Sudoku
 		for ($y = 0; $y < self::SIZE; $y++) {
 			$values = array();
 			for ($x = 0; $x < self::SIZE; $x++) {
-				$this->values[$x][$y] !== NULL && ($values[] = $this->values[$x][$y]);
-			}
+				$value = $this->values[$x][$y];
 
-			if (!self::isUniqueArray($values)) {
-				return FALSE;
+				if ($value !== NULL) {
+					if (isset($values[$value])) {
+						return FALSE;
+					}
+
+					$values[$value] = TRUE;
+				}
 			}
 		}
 
@@ -142,17 +150,22 @@ class Sudoku
 	/** @return void */
 	private function hasUniqueSquares()
 	{
-		for ($i = 0; $i < self::SIZE; $i++) {
+		for ($i = 1; $i <= self::SIZE; $i++) {
 			$values = array();
 			for ($j = 0; $j < self::SIZE; $j++) {
-				$x = (int) (floor($i / 3) * 3 + floor($j / 3));
-				$y = (int) (($i % 3) * 3 + ($j % 3));
+				list ($x, $y) = self::coordsFromSquareNo($i);
+				$x += floor($j / 3);
+				$y += $j % 3;
 
-				$this->values[$x][$y] !== NULL && ($values[] = $this->values[$x][$y]);
-			}
+				$value = $this->values[$x][$y];
 
-			if (!self::isUniqueArray($values)) {
-				return FALSE;
+				if ($value !== NULL) {
+					if (isset($values[$value])) {
+						return FALSE;
+					}
+
+					$values[$value] = TRUE;
+				}
 			}
 		}
 
@@ -185,7 +198,7 @@ class Sudoku
 	{
 		return !$this->isInRow($x, $value)
 				&& !$this->isInColumn($y, $value)
-				&& !$this->isInSquare(1 + (int) (3 * floor($x / 3) + floor($y / 3)), $value);
+				&& !$this->isInSquare(self::squareNoFromCoords($x, $y), $value);
 	}
 
 
@@ -231,8 +244,10 @@ class Sudoku
 	private function isInSquare($n, $value)
 	{
 		for ($i = 0; $i < self::SIZE; $i++) {
-			$x = (int) (floor(($n - 1) / 3) * 3 + floor($i / 3));
-			$y = (int) ((($n - 1) % 3) * 3 + ($i % 3));
+			list ($x, $y) = self::coordsFromSquareNo($n);
+
+			$x += floor($i / 3);
+			$y += $i % 3;
 
 			if ($this->values[$x][$y] === $value) {
 				return TRUE;
@@ -244,20 +259,26 @@ class Sudoku
 
 
 	/**
-	 * @param  array $values
-	 * @return bool
+	 * @param  int $x
+	 * @param  int $y
+	 * @return int
 	 */
-	private static function isUniqueArray(array $values)
+	private static function squareNoFromCoords($x, $y)
 	{
-		for ($i = 0, $len = count($values); $i < $len; $i++) {
-			for ($j = $i + 1; $j < $len; $j++) {
-				if ($values[$i] === $values[$j]) {
-					return FALSE;
-				}
-			}
-		}
+		return 1 + (int) (3 * floor($x / 3) + floor($y / 3));
+	}
 
-		return TRUE;
+
+	/**
+	 * @param  int $n
+	 * @return int[]
+	 */
+	private static function coordsFromSquareNo($n)
+	{
+		return array(
+			(int) (floor(($n - 1) / 3) * 3),
+			(int) ((($n - 1) % 3) * 3),
+		);
 	}
 
 }
