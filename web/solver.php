@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../Sudoku.php';
 
 
-if (!isset($_GET['values'])) {
+if (!isset($_GET['values']) || !is_array($_GET['values'])) {
 	die();
 }
 
