@@ -90,7 +90,11 @@ class Sudoku
 			for ($y = 0; $y < self::SIZE; $y++) {
 				if ($this->values[$x][$y] !== NULL) {
 					$this->values[$x][$y] = (int) $this->values[$x][$y];
-					if ($this->values[$x][$y] < 1 || $this->values[$x][$y] > self::SIZE) {
+
+					if ($this->values[$x][$y] === 0 ){
+						$this->values[$x][$y] = 0;
+
+					} elseif ($this->values[$x][$y] < 1 || $this->values[$x][$y] > self::SIZE) {
 						throw new InvalidBoardValuesException;
 					}
 				}

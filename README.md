@@ -10,15 +10,15 @@ require_once __DIR__ . '/Sudoku.php';
 
 // create board
 $sudoku = new Sudoku([
-	[5,		NULL,	NULL,	4,		NULL,	6,		3,		2,		NULL],
-	[2,		NULL,	NULL,	NULL,	NULL,	7,		NULL,	NULL,	NULL],
-	[NULL,	NULL,	NULL,	NULL,	NULL,	3,		NULL,	4,		1],
-	[NULL,	4,		NULL,	NULL,	NULL,	NULL,	6,		NULL,	NULL],
-	[NULL,	NULL,	2,		NULL,	9,		NULL,	1,		NULL,	NULL],
-	[NULL,	NULL,	1,		NULL,	NULL,	NULL,	NULL,	9,		NULL],
-	[4,		2,		NULL,	6,		NULL,	NULL,	NULL,	NULL,	NULL],
-	[NULL,	NULL,	NULL,	3,		NULL,	NULL,	NULL,	NULL,	4],
-	[NULL,	6,		9,		1,		NULL,	2,		NULL,	NULL,	8],
+	[5, 0, 0, 4, 0, 6, 3, 2, 0],
+	[2, 0, 0, 0, 0, 7, 0, 0, 0],
+	[0, 0, 0, 0, 0, 3, 0, 4, 1],
+	[0, 4, 0, 0, 0, 0, 6, 0, 0],
+	[0, 0, 2, 0, 9, 0, 1, 0, 0],
+	[0, 0, 1, 0, 0, 0, 0, 9, 0],
+	[4, 2, 0, 6, 0, 0, 0, 0, 0],
+	[0, 0, 0, 3, 0, 0, 0, 0, 4],
+	[0, 6, 9, 1, 0, 2, 0, 0, 8],
 ]);
 
 // print it
