@@ -1,0 +1,65 @@
+
+input[type="number"]::-webkit-inner-spin-button, 
+input[type="number"]::-webkit-outer-spin-button { 
+	margin: 0; 
+	-webkit-appearance: none; 
+}
+
+input[type="number"]::-o-outer-spin-button,
+input[type="number"]::-o-inner-spin-button {
+	margin: 0;
+	-o-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+
+
+#board {
+	border-spacing: 0;
+	margin: 0 auto 12px;
+	border: 3px solid #ccc;
+	border-collapse: collapse;
+}
+
+	#board td {
+		border: 1px solid #ccc;
+	}
+
+		#board td.bbt {
+			border-bottom-width: 3px;
+		}
+
+		#board td.brg {
+			border-right-width: 3px;
+		}
+
+	#board input {
+		border: 0;
+		width: 42px;
+		height: 42px;
+		font-size: 24px;
+		line-height: 40px;
+		text-align: center;
+		background: transparent;
+	}
+
+	#board .clue {
+		background: #efe;
+	}
+
+
+#status {
+	color: #999;
+	font-size: 20px;
+	line-height: 72px;
+}
+
+	#status.error {
+		color: #f00;
+	}
+
+	#status.success {
+		color: #0d0;
+	}
