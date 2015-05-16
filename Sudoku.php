@@ -91,89 +91,21 @@ class Sudoku
 				if ($this->values[$x][$y] !== NULL) {
 					$this->values[$x][$y] = (int) $this->values[$x][$y];
 
-					if ($this->values[$x][$y] === 0) {
-						$this->values[$x][$y] = 0;
-
-					} elseif ($this->values[$x][$y] < 1 || $this->values[$x][$y] > self::SIZE) {
+					if ($this->values[$x][$y] < 0 || $this->values[$x][$y] > self::SIZE) {
 						throw new InvalidBoardValuesException;
 					}
-				}
-			}
-		}
 
-		if (!$this->hasUniqueRows() || !$this->hasUniqueColumns() || !$this->hasUniqueSquares()) {
-			throw new InvalidBoardValuesException;
-		}
-	}
+					$value = $this->values[$x][$y];
+					$this->values[$x][$y] = 0;
 
-
-	/** @return void */
-	private function hasUniqueRows()
-	{
-		for ($x = 0; $x < self::SIZE; $x++) {
-			$values = array();
-			for ($y = 0; $y < self::SIZE; $y++) {
-				$value = $this->values[$x][$y];
-
-				if ($value !== NULL) {
-					if (isset($values[$value])) {
-						return FALSE;
+					if (!$this->canBePlaced($x, $y, $value)) {
+						throw new InvalidBoardValuesException;
 					}
 
-					$values[$value] = TRUE;
+					$this->values[$x][$y] = $value;
 				}
 			}
 		}
-
-		return TRUE;
-	}
-
-
-	/** @return void */
-	private function hasUniqueColumns()
-	{
-		for ($y = 0; $y < self::SIZE; $y++) {
-			$values = array();
-			for ($x = 0; $x < self::SIZE; $x++) {
-				$value = $this->values[$x][$y];
-
-				if ($value !== NULL) {
-					if (isset($values[$value])) {
-						return FALSE;
-					}
-
-					$values[$value] = TRUE;
-				}
-			}
-		}
-
-		return TRUE;
-	}
-
-
-	/** @return void */
-	private function hasUniqueSquares()
-	{
-		for ($i = 1; $i <= self::SIZE; $i++) {
-			$values = array();
-			for ($j = 0; $j < self::SIZE; $j++) {
-				list ($x, $y) = self::coordsFromSquareNo($i);
-				$x += floor($j / 3);
-				$y += $j % 3;
-
-				$value = $this->values[$x][$y];
-
-				if ($value !== NULL) {
-					if (isset($values[$value])) {
-						return FALSE;
-					}
-
-					$values[$value] = TRUE;
-				}
-			}
-		}
-
-		return TRUE;
 	}
 
 
@@ -200,89 +132,22 @@ class Sudoku
 	 */
 	private function canBePlaced($x, $y, $value)
 	{
-		return !$this->isInRow($x, $value)
-				&& !$this->isInColumn($y, $value)
-				&& !$this->isInSquare(self::squareNoFromCoords($x, $y), $value);
-	}
-
-
-	/**
-	 * @param  int $x
-	 * @param  int $value
-	 * @return bool
-	 */
-	private function isInRow($x, $value)
-	{
-		for ($y = 0; $y < self::SIZE; $y++) {
-			if ($this->values[$x][$y] === $value) {
-				return TRUE;
-			}
-		}
-
-		return FALSE;
-	}
-
-
-	/**
-	 * @param  int $y
-	 * @param  int $value
-	 * @return bool
-	 */
-	private function isInColumn($y, $value)
-	{
-		for ($x = 0; $x < self::SIZE; $x++) {
-			if ($this->values[$x][$y] === $value) {
-				return TRUE;
-			}
-		}
-
-		return FALSE;
-	}
-
-
-	/**
-	 * @param  int $n
-	 * @param  int $value
-	 * @return bool
-	 */
-	private function isInSquare($n, $value)
-	{
 		for ($i = 0; $i < self::SIZE; $i++) {
-			list ($x, $y) = self::coordsFromSquareNo($n);
-
-			$x += floor($i / 3);
-			$y += $i % 3;
-
-			if ($this->values[$x][$y] === $value) {
-				return TRUE;
+			if ($this->values[$x][$i] === $value || $this->values[$i][$y] === $value) {
+				return FALSE;
 			}
 		}
 
-		return FALSE;
-	}
+		$x1 = floor($x / 3) * 3;
+		$y1 = floor($y / 3) * 3;
 
+		for ($i = 0; $i < self::SIZE; $i++) {
+			if ($this->values[$x1 + floor($i / 3)][$y1 + ($i % 3)] === $value) {
+				return FALSE;
+			}
+		}
 
-	/**
-	 * @param  int $x
-	 * @param  int $y
-	 * @return int
-	 */
-	private static function squareNoFromCoords($x, $y)
-	{
-		return 1 + (int) (3 * floor($x / 3) + floor($y / 3));
-	}
-
-
-	/**
-	 * @param  int $n
-	 * @return int[]
-	 */
-	private static function coordsFromSquareNo($n)
-	{
-		return array(
-			(int) (floor(($n - 1) / 3) * 3),
-			(int) ((($n - 1) % 3) * 3),
-		);
+		return TRUE;
 	}
 
 }
