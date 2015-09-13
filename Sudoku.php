@@ -12,7 +12,7 @@ class Sudoku
 
 
 	/** @param  array $values */
-	function __construct(array $values)
+	public function __construct(array $values)
 	{
 		$this->values = $values;
 		$this->validate();
@@ -20,7 +20,7 @@ class Sudoku
 
 
 	/** @return void */
-	function solve()
+	public function solve()
 	{
 		$coords = $this->findEmptyField();
 
@@ -47,14 +47,14 @@ class Sudoku
 
 
 	/** @return array */
-	function getValues()
+	public function getValues()
 	{
 		return $this->values;
 	}
 
 
 	/** @return void */
-	function dump()
+	public function dump()
 	{
 		for ($x = 0; $x < self::SIZE; $x++) {
 			if ($x % 3 === 0) {
