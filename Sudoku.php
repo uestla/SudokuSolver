@@ -91,18 +91,22 @@ class Sudoku
 				if ($this->values[$x][$y] !== NULL) {
 					$this->values[$x][$y] = (int) $this->values[$x][$y];
 
-					if ($this->values[$x][$y] < 0 || $this->values[$x][$y] > self::SIZE) {
+					if ($this->values[$x][$y] === 0) {
+						$this->values[$x][$y] = NULL;
+
+					} elseif ($this->values[$x][$y] < 0 || $this->values[$x][$y] > self::SIZE) {
 						throw new InvalidBoardValuesException;
+
+					} else {
+						$value = $this->values[$x][$y];
+						$this->values[$x][$y] = NULL;
+
+						if (!$this->canBePlaced($x, $y, $value)) {
+							throw new InvalidBoardValuesException;
+						}
+
+						$this->values[$x][$y] = $value;
 					}
-
-					$value = $this->values[$x][$y];
-					$this->values[$x][$y] = 0;
-
-					if (!$this->canBePlaced($x, $y, $value)) {
-						throw new InvalidBoardValuesException;
-					}
-
-					$this->values[$x][$y] = $value;
 				}
 			}
 		}
